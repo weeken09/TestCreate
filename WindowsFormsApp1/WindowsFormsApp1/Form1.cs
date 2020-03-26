@@ -8,11 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WindowsFormsApp1
+namespace AccountingSoft
 {
     public partial class Form1 : Form
     {
         AuthenticationModule auth;
+        Form2 mainForm = new Form2();
         public Form1()
         {
             auth = new AuthenticationModule();
@@ -25,7 +26,10 @@ namespace WindowsFormsApp1
             string password = textBox2.Text.ToString();
             if (auth.loginFunc(username, password) > 0)
             {
-                MessageBox.Show("Login Successful");
+                
+                
+                this.Hide();
+                mainForm.Show();
             }
             else
             {

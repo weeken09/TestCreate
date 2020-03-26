@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace WindowsFormsApp1
+namespace AccountingSoft
 {
     class DatabaseConnection
     {
@@ -23,24 +23,19 @@ namespace WindowsFormsApp1
         public DataTable ExecSQL(string storeProcQuery)
         {
             DataTable dt = new DataTable();
-            /*try
+            try
             {
-                con.Open();          
+                con.Open();
                 comd = new SqlCommand(storeProcQuery, con);
                 dt.Load(comd.ExecuteReader());
                 con.Close();
                 return dt;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
                 return null;
-            }*/
-            con.Open();
-            comd = new SqlCommand(storeProcQuery, con);
-            dt.Load(comd.ExecuteReader());
-            con.Close();
-            return dt;
+            }
         }
 
     }
