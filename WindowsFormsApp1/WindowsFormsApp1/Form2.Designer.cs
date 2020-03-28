@@ -38,6 +38,8 @@
             this.viewEditUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addCustomerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewEditCustomerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -45,9 +47,9 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.productToolStripMenuItem,
             this.userToolStripMenuItem,
             this.settingToolStripMenuItem,
+            this.productToolStripMenuItem,
             this.logoutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -73,13 +75,13 @@
             // addProductToolStripMenuItem
             // 
             this.addProductToolStripMenuItem.Name = "addProductToolStripMenuItem";
-            this.addProductToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.addProductToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addProductToolStripMenuItem.Text = "Add Product";
             // 
             // viewProductToolStripMenuItem
             // 
             this.viewProductToolStripMenuItem.Name = "viewProductToolStripMenuItem";
-            this.viewProductToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.viewProductToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.viewProductToolStripMenuItem.Text = "View/Edit Product";
             this.viewProductToolStripMenuItem.Click += new System.EventHandler(this.viewProductToolStripMenuItem_Click);
             // 
@@ -108,9 +110,12 @@
             // 
             // settingToolStripMenuItem
             // 
+            this.settingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addCustomerToolStripMenuItem,
+            this.viewEditCustomerToolStripMenuItem});
             this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
-            this.settingToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
-            this.settingToolStripMenuItem.Text = "Setting";
+            this.settingToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
+            this.settingToolStripMenuItem.Text = "Customer";
             // 
             // logoutToolStripMenuItem
             // 
@@ -118,6 +123,20 @@
             this.logoutToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
             this.logoutToolStripMenuItem.Text = "Logout";
             this.logoutToolStripMenuItem.Click += new System.EventHandler(this.logoutToolStripMenuItem_Click);
+            // 
+            // addCustomerToolStripMenuItem
+            // 
+            this.addCustomerToolStripMenuItem.Name = "addCustomerToolStripMenuItem";
+            this.addCustomerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addCustomerToolStripMenuItem.Text = "Add Customer";
+            this.addCustomerToolStripMenuItem.Click += new System.EventHandler(this.addCustomerToolStripMenuItem_Click);
+            // 
+            // viewEditCustomerToolStripMenuItem
+            // 
+            this.viewEditCustomerToolStripMenuItem.Name = "viewEditCustomerToolStripMenuItem";
+            this.viewEditCustomerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.viewEditCustomerToolStripMenuItem.Text = "View/Edit Customer";
+            this.viewEditCustomerToolStripMenuItem.Click += new System.EventHandler(this.viewEditCustomerToolStripMenuItem_Click);
             // 
             // Form2
             // 
@@ -148,5 +167,7 @@
         private System.Windows.Forms.ToolStripMenuItem userToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addUserToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewEditUserToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addCustomerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewEditCustomerToolStripMenuItem;
     }
 }

@@ -12,7 +12,7 @@ namespace AccountingSoft
 {
     public partial class Form2 : Form
     {
-        private bool isFormOpen = false;
+        private Form formOpen;
         public Form2()
         {
             InitializeComponent();
@@ -25,26 +25,68 @@ namespace AccountingSoft
 
         private void viewProductToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if(formOpen != null)
+            {
+                formOpen.Dispose();
+            }
             ViewProduct vPForm = new ViewProduct();       
             vPForm.MdiParent = this;
             vPForm.WindowState = FormWindowState.Maximized;
             vPForm.Show();
+            formOpen = vPForm;
         }
 
         private void addUserToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (formOpen != null)
+            {
+                formOpen.Dispose();
+            }
             AddUser aUForm = new AddUser();
             aUForm.MdiParent = this;
             aUForm.WindowState = FormWindowState.Maximized;
             aUForm.Show();
+            formOpen = aUForm;
         }
 
         private void viewEditUserToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (formOpen != null)
+            {
+                formOpen.Dispose();
+            }
             ViewUser vUForm = new ViewUser();
             vUForm.MdiParent = this;
             vUForm.WindowState = FormWindowState.Maximized;
             vUForm.Show();
+            formOpen = vUForm;
+        }
+
+        private void addCustomerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (formOpen != null)
+            {
+                formOpen.Dispose();
+            }
+            AddCustomer aCForm = new AddCustomer();
+            aCForm.MdiParent = this;
+            aCForm.WindowState = FormWindowState.Maximized;
+            aCForm.Show();
+            formOpen = aCForm;
+
+        }
+
+        private void viewEditCustomerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (formOpen != null)
+            {
+                formOpen.Dispose();
+            }
+            ViewCustomer vCForm = new ViewCustomer();
+            vCForm.MdiParent = this;
+            vCForm.WindowState = FormWindowState.Maximized;
+            vCForm.Show();
+            formOpen = vCForm;
         }
     }
 }

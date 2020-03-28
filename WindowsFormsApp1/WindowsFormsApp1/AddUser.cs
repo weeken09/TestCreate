@@ -50,6 +50,10 @@ namespace AccountingSoft
                 {
                     MessageBox.Show("Password is not same with confirm password!");
                 }
+                else if(userModule.checkUsernameFunc(username) == 0)
+                {
+                    MessageBox.Show("Username exists!");
+                }
                 else
                 {                   
                     try

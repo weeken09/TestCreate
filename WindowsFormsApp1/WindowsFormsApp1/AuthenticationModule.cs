@@ -14,8 +14,11 @@ namespace AccountingSoft
         {
             string storeProcQuery = "EXEC Login @username='" + username + "',@password='" + password + "';";
             DataTable dt = dbcon.ExecSQL(storeProcQuery);
-            if(dt != null)
+            if(dt != null && dt.Rows.Count > 0)
             {
+                string id = dt.Rows[0]["Id"].ToString();
+                storeProcQuery = "EXEC UpdateLoginTime @id=" + id + ";";
+                dbcon.ExecNonSQL(storeProcQuery);
                 return dt.Rows.Count;
             }
             else

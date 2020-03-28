@@ -15,7 +15,7 @@ namespace AccountingSoft
             {
                 string storeProcQuery = "EXEC GetUserWithUsername @username='" + username + "';";
                 DataTable dt = dbcon.ExecSQL(storeProcQuery);
-                return (dt.Rows.Count > 0) ? 1 : 0;               
+                return (dt.Rows.Count > 0) ? 0 : 1;               
             }
             catch(Exception ex)
             {
