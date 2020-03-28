@@ -30,5 +30,21 @@ namespace AccountingSoft
             vPForm.WindowState = FormWindowState.Maximized;
             vPForm.Show();
         }
+
+        private void addUserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddUser aUForm = new AddUser();
+            aUForm.MdiParent = this;
+            aUForm.WindowState = FormWindowState.Maximized;
+            aUForm.Show();
+        }
+
+        private void viewEditUserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ViewUser vUForm = new ViewUser();
+            vUForm.MdiParent = this;
+            vUForm.WindowState = FormWindowState.Maximized;
+            vUForm.Show();
+        }
     }
 }

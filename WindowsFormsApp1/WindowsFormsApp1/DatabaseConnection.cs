@@ -19,6 +19,20 @@ namespace AccountingSoft
             con = new SqlConnection(sqlCon);
         }
 
+        public void ExecNonSQL(string storeProcQuery)
+        {
+            try
+            {
+                con.Open();
+                comd = new SqlCommand(storeProcQuery, con);
+                comd.ExecuteNonQuery();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
 
         public DataTable ExecSQL(string storeProcQuery)
         {
