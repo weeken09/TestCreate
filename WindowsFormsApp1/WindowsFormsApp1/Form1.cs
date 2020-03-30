@@ -25,10 +25,9 @@ namespace AccountingSoft
             string username = textBox1.Text.ToLower();
             string password = textBox2.Text.ToString();
             if (auth.loginFunc(username, password) > 0)
-            {
-                
-                
+            {           
                 this.Hide();
+                mainForm.username = username;
                 mainForm.Show();
             }
             else

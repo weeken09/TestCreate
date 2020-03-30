@@ -26,6 +26,21 @@ namespace AccountingSoft
             }
         }
 
+        public DataTable getCustomerFunc(string id)
+        {
+            string storeProcQuery = "EXEC GetCustomerWithId @id=" + id + ";";
+            DataTable dt = dbcon.ExecSQL(storeProcQuery);
+            if (dt != null)
+            {
+                return dt;
+            }
+            else
+            {
+                return null;
+            }
+            
+        }
+
         public DataTable getCustomerFunc()
         {
             string storeProcQuery = "EXEC GetCustomers;";

@@ -13,6 +13,7 @@ namespace AccountingSoft
     public partial class Form2 : Form
     {
         private Form formOpen;
+        public string username;
         public Form2()
         {
             InitializeComponent();
@@ -87,6 +88,24 @@ namespace AccountingSoft
             vCForm.WindowState = FormWindowState.Maximized;
             vCForm.Show();
             formOpen = vCForm;
+        }
+
+        private void Form2_Load(object sender, EventArgs e)
+        {
+            label1.Text = "Welcome, " + username;
+        }
+
+        private void addSalesOrderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (formOpen != null)
+            {
+                formOpen.Dispose();
+            }
+            AddSalesOrder aSOForm = new AddSalesOrder();
+            aSOForm.MdiParent = this;
+            aSOForm.WindowState = FormWindowState.Maximized;
+            aSOForm.Show();
+            formOpen = aSOForm;
         }
     }
 }
