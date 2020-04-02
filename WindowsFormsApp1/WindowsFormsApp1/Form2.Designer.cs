@@ -39,10 +39,10 @@
             this.productToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addProductToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewProductToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label1 = new System.Windows.Forms.Label();
             this.salesOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addSalesOrderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label1 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -125,15 +125,31 @@
             // addProductToolStripMenuItem
             // 
             this.addProductToolStripMenuItem.Name = "addProductToolStripMenuItem";
-            this.addProductToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.addProductToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addProductToolStripMenuItem.Text = "Add Product";
+            this.addProductToolStripMenuItem.Click += new System.EventHandler(this.addProductToolStripMenuItem_Click);
             // 
             // viewProductToolStripMenuItem
             // 
             this.viewProductToolStripMenuItem.Name = "viewProductToolStripMenuItem";
-            this.viewProductToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.viewProductToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.viewProductToolStripMenuItem.Text = "View/Edit Product";
             this.viewProductToolStripMenuItem.Click += new System.EventHandler(this.viewProductToolStripMenuItem_Click);
+            // 
+            // salesOrderToolStripMenuItem
+            // 
+            this.salesOrderToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addSalesOrderToolStripMenuItem});
+            this.salesOrderToolStripMenuItem.Name = "salesOrderToolStripMenuItem";
+            this.salesOrderToolStripMenuItem.Size = new System.Drawing.Size(78, 20);
+            this.salesOrderToolStripMenuItem.Text = "Sales Order";
+            // 
+            // addSalesOrderToolStripMenuItem
+            // 
+            this.addSalesOrderToolStripMenuItem.Name = "addSalesOrderToolStripMenuItem";
+            this.addSalesOrderToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.addSalesOrderToolStripMenuItem.Text = "Add Sales Order";
+            this.addSalesOrderToolStripMenuItem.Click += new System.EventHandler(this.addSalesOrderToolStripMenuItem_Click);
             // 
             // logoutToolStripMenuItem
             // 
@@ -151,21 +167,6 @@
             this.label1.Size = new System.Drawing.Size(41, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "label1";
-            // 
-            // salesOrderToolStripMenuItem
-            // 
-            this.salesOrderToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addSalesOrderToolStripMenuItem});
-            this.salesOrderToolStripMenuItem.Name = "salesOrderToolStripMenuItem";
-            this.salesOrderToolStripMenuItem.Size = new System.Drawing.Size(78, 20);
-            this.salesOrderToolStripMenuItem.Text = "Sales Order";
-            // 
-            // addSalesOrderToolStripMenuItem
-            // 
-            this.addSalesOrderToolStripMenuItem.Name = "addSalesOrderToolStripMenuItem";
-            this.addSalesOrderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.addSalesOrderToolStripMenuItem.Text = "Add Sales Order";
-            this.addSalesOrderToolStripMenuItem.Click += new System.EventHandler(this.addSalesOrderToolStripMenuItem_Click);
             // 
             // Form2
             // 

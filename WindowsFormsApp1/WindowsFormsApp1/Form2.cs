@@ -107,5 +107,18 @@ namespace AccountingSoft
             aSOForm.Show();
             formOpen = aSOForm;
         }
+
+        private void addProductToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (formOpen != null)
+            {
+                formOpen.Dispose();
+            }
+            AddProduct aPForm = new AddProduct();
+            aPForm.MdiParent = this;
+            aPForm.WindowState = FormWindowState.Maximized;
+            aPForm.Show();
+            formOpen = aPForm;
+        }
     }
 }

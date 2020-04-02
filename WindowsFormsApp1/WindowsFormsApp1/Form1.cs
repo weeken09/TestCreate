@@ -28,6 +28,7 @@ namespace AccountingSoft
             {           
                 this.Hide();
                 mainForm.username = username;
+                Setting.setCurrentUsername(username);
                 mainForm.Show();
             }
             else

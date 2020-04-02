@@ -11,9 +11,19 @@ namespace AccountingSoft
 {
     public partial class ViewProduct : Form
     {
+        ProductModule productModule = new ProductModule();
         public ViewProduct()
         {
             InitializeComponent();
+        }
+
+        private void ViewProduct_Load(object sender, EventArgs e)
+        {
+            DataTable dt = productModule.getProductFunc();
+            if (dt != null)
+            {
+                dataGridView1.DataSource = dt;
+            }
         }
     }
 }

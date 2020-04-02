@@ -63,7 +63,7 @@ namespace AccountingSoft
         }
 
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {    
+        {
             if (e.RowIndex >= 0)
             {
                 switch (this.dataGridView1.Columns[e.ColumnIndex].HeaderText)
@@ -74,10 +74,8 @@ namespace AccountingSoft
                     case "Unit Price(RM)":
                         unitprice = double.Parse(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
                         break;
-                }
-                              
+                }                              
                 double total = unitprice * quantity;
-                Console.WriteLine("Total" + total);
                 dataGridView1.Rows[e.RowIndex].Cells[4].Value = total;
             }
         }

@@ -23,6 +23,19 @@ namespace AccountingSoft
                 return 0;
             }
         }
+        public DataTable getUserFunc(string username)
+        {
+            try
+            {
+                string storeProcQuery = "EXEC GetUserWithUsername @username='" + username + "';";
+                return dbcon.ExecSQL(storeProcQuery);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+            }
+        }
         public int addUserFunc(string fullname,int age, string email, string username, string password, int userCat)
         {   
             try
