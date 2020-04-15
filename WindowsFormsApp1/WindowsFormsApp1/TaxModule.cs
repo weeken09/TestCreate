@@ -22,5 +22,28 @@ namespace AccountingSoft
                 return null;
             }
         }
+
+        public double getTaxRateFunc(string productId)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                string storeProcQuery = "EXEC GetTaxRateWithProductId @id=" + productId + ";";
+                dt = dbcon.ExecSQL(storeProcQuery);
+                if(dt.Rows.Count > 0)
+                {
+                    return double.Parse(dt.Rows[0][0].ToString());
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+                return 0;
+            }
+        }
     }
 }

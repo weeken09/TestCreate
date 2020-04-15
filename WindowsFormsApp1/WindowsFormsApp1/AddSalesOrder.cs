@@ -13,11 +13,14 @@ namespace AccountingSoft
     {
         CustomerModule customerModule = new CustomerModule();
         ProductModule productModule = new ProductModule();
-        double quantity = 0, unitprice = 0;
+        TaxModule taxModule = new TaxModule();
         DataTable dtSO;
         double total = 0;
-        bool taxable;
+        double taxTotal = 0;
+        double grandTotal = 0;
+        double discountTotal = 0;
         string productName;
+        double taxRate;
         public AddSalesOrder()
         {
             InitializeComponent();
@@ -33,7 +36,8 @@ namespace AccountingSoft
             dtSO.Columns.Add("Quantity", typeof(double));
             dtSO.Columns.Add("Amount(RM)", typeof(string));
             dtSO.Columns.Add("Remark", typeof(string));
-            dtSO.Columns.Add("Taxable", typeof(string));           
+            dtSO.Columns.Add("Tax(%)", typeof(double));
+            dtSO.Columns.Add("Discount(RM)", typeof(double));
             comboBox1.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             comboBox1.AutoCompleteSource = AutoCompleteSource.ListItems;
             if(dt != null)
@@ -54,7 +58,8 @@ namespace AccountingSoft
             dataGridView1.Columns[1].DefaultCellStyle.Format = "0.00##";
             dataGridView1.Columns[2].DefaultCellStyle.Format = "0.0##";
             dataGridView1.Columns[3].DefaultCellStyle.Format = "0.00##";
-            
+            dataGridView1.Columns[5].DefaultCellStyle.Format = "0.00##";
+            dataGridView1.Columns[6].DefaultCellStyle.Format = "0.00##";
         }
 
         private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
@@ -76,54 +81,24 @@ namespace AccountingSoft
             if (dt != null && dt.Rows.Count > 0)
             {
                 textBox3.Text = string.Format("{0:0.00}", double.Parse(dt.Rows[0]["ProductPrice"].ToString()));
-                taxable = (int.Parse(dt.Rows[0]["Taxable"].ToString()) == 1);
                 productName = dt.Rows[0]["ProductName"].ToString();
+                taxRate = taxModule.getTaxRateFunc(id);
             }
-        }
-
-        private void dataGridView1_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
-        {
-            if (dataGridView1.CurrentCell.ColumnIndex == 1 && e.Control is ComboBox)
-            {
-                ComboBox comboBox = e.Control as ComboBox;
-                comboBox.SelectedIndexChanged -= LastColumnComboSelectionChanged;
-                comboBox.SelectedIndexChanged += LastColumnComboSelectionChanged;
-            }
-            if(dataGridView1.CurrentCell.ColumnIndex == 2)
-            {
-                double tempOut;
-                TextBox txtQuantity = e.Control as TextBox;
-                if(double.TryParse(txtQuantity.Text, out tempOut)){
-                    quantity = tempOut;
-                }
-            }
-        }
-
-        private void LastColumnComboSelectionChanged(object sender, EventArgs e)
-        {
-           
-            var currentcell = dataGridView1.CurrentCellAddress;
-            var sendingCB = sender as DataGridViewComboBoxEditingControl;
-            DataGridViewTextBoxCell cel = (DataGridViewTextBoxCell)dataGridView1.Rows[currentcell.Y].Cells[3];
-            DataGridViewTextBoxCell celNo = (DataGridViewTextBoxCell)dataGridView1.Rows[currentcell.Y].Cells[0];
-            if (sendingCB.SelectedValue != null)
-            {
-                DataTable dtPS = productModule.getProductFunc(sendingCB.SelectedValue.ToString());
-                if (dtPS != null)
-                {
-                    cel.Value = dtPS.Rows[0]["ProductPrice"].ToString();
-                    celNo.Value = (currentcell.Y + 1).ToString();
-                }
-            }           
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            double temp;
+            double tempQuantity;
             double quantity = 0;
-            if(double.TryParse(textBox4.Text.ToString(), out temp))
+            double tempDiscountPercentage;
+            double tempDiscountRM;
+            double discount = 0;
+            bool discountValidPercent = double.TryParse(textBox7.Text, out tempDiscountPercentage);
+            bool discountValidRM = double.TryParse(textBox5.Text, out tempDiscountRM);
+            
+            if (double.TryParse(textBox4.Text.ToString(), out tempQuantity))
             {
-                quantity = temp;
+                quantity = tempQuantity;
                 if(string.IsNullOrEmpty(textBox3.Text.ToString()) || string.IsNullOrEmpty(textBox4.Text.ToString()))
                 {
                     MessageBox.Show("Please fill in all the blank!");
@@ -132,18 +107,63 @@ namespace AccountingSoft
                 {
                     MessageBox.Show("Please enter a valid quantity!");
                 }
-                else
+                else if(!discountValidPercent && radioButton1.Checked)
                 {
+                    MessageBox.Show("Please enter a valid discount!");
+                }
+                else if (!discountValidRM && radioButton2.Checked)
+                {
+                    MessageBox.Show("Please enter a valid discount!");
+                }
+                else
+                {                   
+                    bool found = false;
                     double price = double.Parse(textBox3.Text.ToString());
                     double amount = price * quantity;
+                    double tax = amount * taxRate / 100.0;
                     string remark = textBox6.Text.ToString();
+                    if (radioButton1.Checked)
+                    {
+                        discount = amount * tempDiscountPercentage / 100;
+                    }
+                    else if (radioButton2.Checked)
+                    {
+                        discount = tempDiscountRM;
+                    }
+                    discountTotal += discount;
+                    taxTotal += tax;
                     total += amount;
-                    dtSO.Rows.Add(productName,price,quantity,amount,remark,taxable ? "Yes" : "No");
+                    grandTotal = total + taxTotal - discountTotal;
+                    if(dtSO.Rows.Count > 0)
+                    {
+                        foreach (DataGridViewRow row in dataGridView1.Rows)
+                        {
+                            if(row.Cells[0].Value != null)
+                            {
+                                if (row.Cells[0].Value.ToString().Equals(productName) && double.Parse(row.Cells[1].Value.ToString()) == price)
+                                {
+                                    quantity += double.Parse(row.Cells[2].Value.ToString());
+                                    discount += double.Parse(row.Cells[6].Value.ToString());
+                                    row.Cells[2].Value = quantity;
+                                    row.Cells[3].Value = quantity * price;
+                                    row.Cells[6].Value = discount;
+                                    found = true;
+                                }
+                            }
+                        }
+                    }                    
+                    if (!found)
+                    {
+                        dtSO.Rows.Add(productName, price, quantity, amount, remark, taxRate, discount);
+                    }                  
                     foreach (DataGridViewRow row in dataGridView1.Rows)
                     {
                         row.HeaderCell.Value = String.Format("{0}", row.Index + 1);
                     }
                     label9.Text = string.Format("{0:0.00}", total);
+                    label15.Text = string.Format("{0:0.00}", taxTotal);
+                    label13.Text = string.Format("{0:0.00}", discountTotal);
+                    label16.Text = string.Format("{0:0.00}", grandTotal);
                     textBox3.Clear();
                     textBox4.Clear();
                     textBox6.Clear();
@@ -166,8 +186,8 @@ namespace AccountingSoft
                     if (dt != null && dt.Rows.Count > 0)
                     {
                         textBox3.Text = string.Format("{0:0.00}", double.Parse(dt.Rows[0]["ProductPrice"].ToString()));
-                        taxable = (int.Parse(dt.Rows[0]["Taxable"].ToString()) == 1);
                         productName = dt.Rows[0]["ProductName"].ToString();
+                        taxRate = taxModule.getTaxRateFunc(id);
                     }
                 }
                 else
@@ -198,10 +218,16 @@ namespace AccountingSoft
             {
                 foreach (DataGridViewRow row in dataGridView1.SelectedRows)
                 {
+                    taxTotal -= double.Parse(row.Cells[3].Value.ToString()) * taxRate / 100.0;
                     total -= double.Parse(row.Cells[3].Value.ToString());
+                    discountTotal -= double.Parse(row.Cells[6].Value.ToString());
+                    grandTotal = total + taxTotal - discountTotal;
                     dataGridView1.Rows.RemoveAt(row.Index);                   
                 }
                 label9.Text = string.Format("{0:0.00}", total);
+                label15.Text = string.Format("{0:0.00}", taxTotal);
+                label16.Text = string.Format("{0:0.00}", grandTotal);
+                label13.Text = string.Format("{0:0.00}", discountTotal);
                 foreach (DataGridViewRow row in dataGridView1.Rows)
                 {
                     row.HeaderCell.Value = String.Format("{0}", row.Index + 1);
