@@ -30,6 +30,7 @@ namespace AccountingSoft
             }
             catch (Exception ex)
             {
+                con.Close();
                 Console.WriteLine(ex);
             }
         }
@@ -47,6 +48,7 @@ namespace AccountingSoft
             }
             catch (Exception ex)
             {
+                con.Close();
                 Console.WriteLine(ex);
                 return null;
             }

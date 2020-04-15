@@ -38,6 +38,20 @@ namespace AccountingSoft
             {
                 return null;
             }
+        } 
+
+        public DataTable getProductFunc(string id)
+        {
+            string storeProcQuery = "EXEC GetProductWithId @id=" + id + ";";
+            DataTable dt = dbcon.ExecSQL(storeProcQuery);
+            if (dt != null)
+            {
+                return dt;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
