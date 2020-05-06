@@ -120,5 +120,18 @@ namespace AccountingSoft
             aPForm.Show();
             formOpen = aPForm;
         }
+
+        private void viewSalesOrderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (formOpen != null)
+            {
+                formOpen.Dispose();
+            }
+            ViewSalesOrder vSOForm = new ViewSalesOrder();
+            vSOForm.MdiParent = this;
+            vSOForm.WindowState = FormWindowState.Maximized;
+            vSOForm.Show();
+            formOpen = vSOForm;
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace AccountingSoft
 {
     public partial class AddSalesOrder : Form
     {
+        SalesOrderModule salesOrderModule = new SalesOrderModule();
         CustomerModule customerModule = new CustomerModule();
         ProductModule productModule = new ProductModule();
         TaxModule taxModule = new TaxModule();
@@ -21,6 +22,8 @@ namespace AccountingSoft
         double discountTotal = 0;
         string productName;
         double taxRate;
+        int productId;
+        int customerId;
         public AddSalesOrder()
         {
             InitializeComponent();
@@ -35,9 +38,9 @@ namespace AccountingSoft
             dtSO.Columns.Add("Unit Price(RM)", typeof(double));
             dtSO.Columns.Add("Quantity", typeof(double));
             dtSO.Columns.Add("Amount(RM)", typeof(string));
-            dtSO.Columns.Add("Remark", typeof(string));
             dtSO.Columns.Add("Tax(%)", typeof(double));
             dtSO.Columns.Add("Discount(RM)", typeof(double));
+            dtSO.Columns.Add("ID", typeof(int));
             comboBox1.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             comboBox1.AutoCompleteSource = AutoCompleteSource.ListItems;
             if(dt != null)
@@ -58,8 +61,9 @@ namespace AccountingSoft
             dataGridView1.Columns[1].DefaultCellStyle.Format = "0.00##";
             dataGridView1.Columns[2].DefaultCellStyle.Format = "0.0##";
             dataGridView1.Columns[3].DefaultCellStyle.Format = "0.00##";
+            dataGridView1.Columns[4].DefaultCellStyle.Format = "0.00##";
             dataGridView1.Columns[5].DefaultCellStyle.Format = "0.00##";
-            dataGridView1.Columns[6].DefaultCellStyle.Format = "0.00##";
+            dataGridView1.Columns[6].Visible = false;
         }
 
         private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
@@ -68,6 +72,7 @@ namespace AccountingSoft
             DataTable dt = customerModule.getCustomerFunc(id);
             if (dt != null && dt.Rows.Count > 0)
             {
+                customerId = int.Parse(id);
                 richTextBox1.Text = dt.Rows[0]["CusAddress"].ToString();
                 textBox1.Text = (string.IsNullOrWhiteSpace(dt.Rows[0]["CusOfficePhone"].ToString()) ? dt.Rows[0]["CusHandPhone"].ToString() : dt.Rows[0]["CusOfficePhone"].ToString());
                 textBox2.Text = dt.Rows[0]["CusEmail"].ToString();
@@ -80,6 +85,7 @@ namespace AccountingSoft
             DataTable dt = productModule.getProductFunc(id);
             if (dt != null && dt.Rows.Count > 0)
             {
+                productId = int.Parse(id);
                 textBox3.Text = string.Format("{0:0.00}", double.Parse(dt.Rows[0]["ProductPrice"].ToString()));
                 productName = dt.Rows[0]["ProductName"].ToString();
                 taxRate = taxModule.getTaxRateFunc(id);
@@ -121,7 +127,6 @@ namespace AccountingSoft
                     double price = double.Parse(textBox3.Text.ToString());
                     double amount = price * quantity;
                     double tax = amount * taxRate / 100.0;
-                    string remark = textBox6.Text.ToString();
                     if (radioButton1.Checked)
                     {
                         discount = amount * tempDiscountPercentage / 100;
@@ -146,7 +151,7 @@ namespace AccountingSoft
                                     discount += double.Parse(row.Cells[6].Value.ToString());
                                     row.Cells[2].Value = quantity;
                                     row.Cells[3].Value = quantity * price;
-                                    row.Cells[6].Value = discount;
+                                    row.Cells[5].Value = discount;
                                     found = true;
                                 }
                             }
@@ -154,7 +159,7 @@ namespace AccountingSoft
                     }                    
                     if (!found)
                     {
-                        dtSO.Rows.Add(productName, price, quantity, amount, remark, taxRate, discount);
+                        dtSO.Rows.Add(productName, price, quantity, amount, taxRate, discount, productId);
                     }                  
                     foreach (DataGridViewRow row in dataGridView1.Rows)
                     {
@@ -166,7 +171,6 @@ namespace AccountingSoft
                     label16.Text = string.Format("{0:0.00}", grandTotal);
                     textBox3.Clear();
                     textBox4.Clear();
-                    textBox6.Clear();
                 }
             }
             else
@@ -185,6 +189,7 @@ namespace AccountingSoft
                     DataTable dt = productModule.getProductFunc(id);
                     if (dt != null && dt.Rows.Count > 0)
                     {
+                        productId = int.Parse(id);
                         textBox3.Text = string.Format("{0:0.00}", double.Parse(dt.Rows[0]["ProductPrice"].ToString()));
                         productName = dt.Rows[0]["ProductName"].ToString();
                         taxRate = taxModule.getTaxRateFunc(id);
@@ -220,7 +225,7 @@ namespace AccountingSoft
                 {
                     taxTotal -= double.Parse(row.Cells[3].Value.ToString()) * taxRate / 100.0;
                     total -= double.Parse(row.Cells[3].Value.ToString());
-                    discountTotal -= double.Parse(row.Cells[6].Value.ToString());
+                    discountTotal -= double.Parse(row.Cells[5].Value.ToString());
                     grandTotal = total + taxTotal - discountTotal;
                     dataGridView1.Rows.RemoveAt(row.Index);                   
                 }
@@ -245,6 +250,7 @@ namespace AccountingSoft
                     DataTable dt = customerModule.getCustomerFunc(id);
                     if (dt != null && dt.Rows.Count > 0)
                     {
+                        customerId = int.Parse(id);
                         richTextBox1.Text = dt.Rows[0]["CusAddress"].ToString();
                         textBox1.Text = (string.IsNullOrWhiteSpace(dt.Rows[0]["CusOfficePhone"].ToString()) ? dt.Rows[0]["CusHandPhone"].ToString() : dt.Rows[0]["CusOfficePhone"].ToString());
                         textBox2.Text = dt.Rows[0]["CusEmail"].ToString();
@@ -255,6 +261,28 @@ namespace AccountingSoft
                     MessageBox.Show("No customer found!");
                 }
             }
-        }      
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            string remarks = richTextBox2.Text;
+            List<OrderDetail> orderDetails = new List<OrderDetail>();
+            Console.WriteLine(dataGridView1.Rows.Count);
+            if (dataGridView1.Rows.Count > 1)
+            {
+                for (int i = 0; i < dataGridView1.Rows.Count - 1 ; i++)
+                {
+                    DataGridViewRow dr = dataGridView1.Rows[i];
+                    OrderDetail od = new OrderDetail(int.Parse(dr.Cells[6].Value.ToString()), double.Parse(dr.Cells[3].Value.ToString()), double.Parse(dr.Cells[2].Value.ToString()), double.Parse(dr.Cells[4].Value.ToString()), double.Parse(dr.Cells[5].Value.ToString()));
+                    orderDetails.Add(od);
+                }
+                int indicator = salesOrderModule.addSalesOrderFunc(customerId, double.Parse(label9.Text.ToString()), double.Parse(label15.Text.ToString()), double.Parse(label13.Text.ToString()), double.Parse(label16.Text.ToString()), 1, remarks, orderDetails);
+                MessageBox.Show((indicator == 1) ? "Sales Order successfully added!" : "Sales order add fail!");
+            }
+            else
+            {
+                MessageBox.Show("No product choose!");
+            }
+        }
     }
 }
